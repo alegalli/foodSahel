@@ -3,7 +3,7 @@ import xlrd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-#Read CH data from excel
+# Read CH data from excel
 ch = pd.read_excel('../data/Cadre Harmonise/cadre_harmonise.xlsx')
 
 # Features I'm interested in:

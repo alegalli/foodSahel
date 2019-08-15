@@ -1,4 +1,4 @@
-adm1_nameimport pandas as pd
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -30,9 +30,21 @@ confn = confn[['year','date','adm0_name','adm1_name','adm2_name','adm3_name',
         'event_type','sub_event_type','fatalities']]
 
 # Select adm1_name to work with
-confm = confm[confm.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tindilleri'])]
+confm = confm[confm.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
 confm = confm.reset_index(drop=True)
-confb = confb[confb.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tindilleri'])]
+confb = confb[confb.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
 confb = confb.reset_index(drop=True)
-confn = confn[confn.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tindilleri'])]
+confn = confn[confn.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
 confn = confn.reset_index(drop=True)
+
+# Manipulate data to create consistency with the other data
+# adm3=='Ayorou' => adm2:'Ayerou'
+# adm3=='Torodi' => adm2:'Torodi'
+# adm3=='Abala' => adm2:'Abala'
+for i in confn.index:
+    if confn.loc[i,'adm3_name']=='Ayorou':
+        confn.at[i,'adm2_name']='Ayerou'
+    if confn.loc[i,'adm3_name']=='Torodi':
+        confn.at[i,'adm2_name']='Torodi'
+    if confn.loc[i,'adm3_name']=='Abala':
+        confn.at[i,'adm2_name']='Abala'

@@ -1,4 +1,4 @@
-adm2_nameimport pandas as pd
+import pandas as pd
 import xlrd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -19,6 +19,9 @@ bio = bio[bio.adm0_name.isin(['Mali','Burkina Faso','Niger'])]
 bio = bio[bio.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
 bio = bio.reset_index(drop=True)
 
+# Manipulate data to create consistency with the other data
+# adm2=='Gothaye' => adm2:'Gotheye'
+bio['adm2_name'].replace('Gothaye','Gotheye',inplace=True)
 
 
 # Extract csv
