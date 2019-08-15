@@ -11,23 +11,31 @@ confm.rename(columns={'country':'adm0_name',
                     'admin1':'adm1_name',
                     'admin2':'adm2_name',
                     'admin3':'adm3_name',
-                    'event_date':'date'}, inplace=True)
+                    'event_date':'date',
+                    'year':'reference_year'}, inplace=True)
 confb.rename(columns={'country':'adm0_name',
                     'admin1':'adm1_name',
                     'admin2':'adm2_name',
                     'admin3':'adm3_name',
-                    'event_date':'date'}, inplace=True)
+                    'event_date':'date',
+                    'year':'reference_year'}, inplace=True)
 confn.rename(columns={'country':'adm0_name',
                     'admin1':'adm1_name',
                     'admin2':'adm2_name',
                     'admin3':'adm3_name',
-                    'event_date':'date'}, inplace=True)
-confm = confm[['year','date','adm0_name','adm1_name','adm2_name','adm3_name',
+                    'event_date':'date',
+                    'year':'reference_year'}, inplace=True)
+confm = confm[['reference_year','date','adm0_name','adm1_name','adm2_name','adm3_name',
         'event_type','sub_event_type','fatalities']]
-confb = confb[['year','date','adm0_name','adm1_name','adm2_name','adm3_name',
+confb = confb[['reference_year','date','adm0_name','adm1_name','adm2_name','adm3_name',
         'event_type','sub_event_type','fatalities']]
-confn = confn[['year','date','adm0_name','adm1_name','adm2_name','adm3_name',
+confn = confn[['reference_year','date','adm0_name','adm1_name','adm2_name','adm3_name',
         'event_type','sub_event_type','fatalities']]
+
+# Extract reference_year
+confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
+confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
+confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
 
 # Select adm1_name to work with
 confm = confm[confm.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
