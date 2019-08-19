@@ -27,6 +27,15 @@ bio = bio[bio.adm0_name.isin(['Mali','Burkina Faso','Niger'])]
 
 # Select adm1_name to work with
 bio = bio[bio.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
+bio = bio[bio.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara','Tenenkou','Mopti','Youwarou',
+                              'Gourma-Rharous','Dire','Niafunke',
+                              'Gao','Ansongo','Menaka','Bourem',
+                              'Yatenga','Loroum',
+                              'Yagha','Seno','Soum','Oudalan',
+                              'Komonjdjari',
+                              'Tahoua','Tassara','Tillia',
+                              'Banibangou','Filingue','Ouallam','Say','Tera','Tillaberi','Balleyara','Torodi','Bankilare','Abala','Ayerou','Gotheye'])]
+
 bio = bio.reset_index(drop=True)
 
 # Manipulate data to create consistency with the other data

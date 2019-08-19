@@ -56,3 +56,11 @@ for i in confn.index:
         confn.at[i,'adm2_name']='Torodi'
     if confn.loc[i,'adm3_name']=='Abala':
         confn.at[i,'adm2_name']='Abala'
+
+
+confm = confm[confm.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara','Tenenkou','Mopti','Youwarou', 'Gourma-Rharous','Dire','Niafunke', 'Gao','Ansongo','Menaka','Bourem'])]
+confb = confb[confb.adm2_name.isin(['Yatenga','Loroum', 'Yagha','Seno','Soum','Oudalan', 'Komonjdjari'])]
+confn = confn[confn.adm2_name.isin(['Tahoua','Tassara','Tillia', 'Banibangou','Filingue','Ouallam','Say','Tera','Tillaberi','Balleyara','Torodi','Bankilare','Abala','Ayerou','Gotheye'])]
+confm = confm.reset_index(drop=True)
+confb = confb.reset_index(drop=True)
+confn = confn.reset_index(drop=True)
