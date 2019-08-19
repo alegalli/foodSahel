@@ -20,6 +20,9 @@ bio.rename(columns={'admin0Name':'adm0_name',
 bio = bio[['adm0_name','adm1_name','adm2_name','Shape_Area','AREA',
         '2013','2014','2015','2016','2017','2018']]
 
+# Manipulate data to create consistency with the other data
+# adm2=='Gothaye' => adm2:'Gotheye'
+bio['adm2_name'].replace('Gothaye','Gotheye',inplace=True)
 
 # Countries I'm interested in:
 bio = bio[bio.adm0_name.isin(['Mali','Burkina Faso','Niger'])]
@@ -38,9 +41,6 @@ bio = bio[bio.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara',
 
 bio = bio.reset_index(drop=True)
 
-# Manipulate data to create consistency with the other data
-# adm2=='Gothaye' => adm2:'Gotheye'
-bio['adm2_name'].replace('Gothaye','Gotheye',inplace=True)
 
 # Biomass production per AREA: Biomass Density biodens
 biodens = pd.DataFrame(np.array([[2013,2014,2015,2016,2017,2018]]),columns=['2013','2014','2015','2016','2017','2018'])
@@ -56,8 +56,9 @@ biodens = biodens.T
 biodens = biodens.reset_index(drop=True)
 # Rename the biodens with the respective adm2_name
 biodens.columns = ['year']+bio.adm2_name.unique().tolist()
-# Selecting the adm2_name with biodens < 30
-biotry = biodens.loc[0, biodens.loc[0]<30]
+
+# Selecting the adm2_name with a certain criteria
+biotry = biodens.loc[0,biodens.columns.isin(['Yatenga','Loroum','Yagha','Soum','Komonjdjari'])]
 
 # Select plot style
 # See more: https://github.com/matplotlib/matplotlib/blob/38be7aeaaac3691560aeadafe46722dda427ef47/lib/matplotlib/mpl-data/stylelib/fivethirtyeight.mplstyle
@@ -65,7 +66,7 @@ style.use('fivethirtyeight')
 # Plot Biomass Density of the adm2_name tonnes/m^2
 bio_graph = biodens.plot(x='year',y=biotry.index,figsize=(10,7))
 bio_graph.tick_params(axis='both',which='major',labelsize=18)
-bio_graph.set_yticklabels(labels = [-10, '0   ', '10   ', '20   ', '30   ', '40%  ', '50'])
+bio_graph.set_yticklabels(labels = [-10, '0   ', '10   ', '20   ', '30   ', '40   ', '50   ', '60   ', '70   ', '80   '])
 bio_graph.axhline(y = 0, color = 'black', linewidth = 1.3, alpha = .7)
 # TODO: Set limits
 #bio_graph.set_xlim(left = 1969, right = 2011) #mi da problemi
