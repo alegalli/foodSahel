@@ -78,4 +78,4 @@ plt.show()
 
 
 # Extract csv
-ex = bio.to_csv('../data/biomass.csv', index=False)
+#ex = bio.to_csv('../data/biomass.csv', index=False)

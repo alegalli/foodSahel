@@ -57,6 +57,9 @@ for i in confn.index:
     if confn.loc[i,'adm3_name']=='Abala':
         confn.at[i,'adm2_name']='Abala'
 
+#confm = confm.drop(['adm3_name'])
+#confb = confb.drop(['adm3_name'])
+#confn = confn.drop(['adm3_name'])
 
 confm = confm[confm.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara','Tenenkou','Mopti','Youwarou', 'Gourma-Rharous','Dire','Niafunke', 'Gao','Ansongo','Menaka','Bourem'])]
 confb = confb[confb.adm2_name.isin(['Yatenga','Loroum', 'Yagha','Seno','Soum','Oudalan', 'Komonjdjari'])]
@@ -64,3 +67,32 @@ confn = confn[confn.adm2_name.isin(['Tahoua','Tassara','Tillia', 'Banibangou','F
 confm = confm.reset_index(drop=True)
 confb = confb.reset_index(drop=True)
 confn = confn.reset_index(drop=True)
+
+
+# Number of conflicts per year per adm2_name
+ncym = pd.DataFrame(columns=['reference_year','adm2_name','conflicts'])
+for year in confm['reference_year'].unique():
+    for elem in confm['adm2_name'].unique():
+        ncym = ncym.append(pd.Series([year, elem, 0],index=ncym.columns),ignore_index=True)
+
+# Esattamente questo!
+# Counts number of conflicts in a year in a adm2_name
+for idx, elem in confm.iterrows():
+    ncym.set_value(ncym[(ncym.reference_year == elem.reference_year) & (ncym.adm2_name == elem.adm2_name)].index,'conflicts', ncym['conflicts']+1)
+
+
+
+# Number of conflicts in Gao per reference_year
+plt.style.use('fivethirtyeight')
+graph = ncym[ncym['adm2_name'] == 'Gao'].plot(x='reference_year',y='conflicts',figsize=(10,7))
+plt.show()
+
+
+
+
+
+for year in range(2013,2020):
+    if elem.loc['reference_year'] == year:
+        ncym[year] = elem.value_counts()
+
+confm.plot(x='reference_year',y='adm2_name',data=confm)
