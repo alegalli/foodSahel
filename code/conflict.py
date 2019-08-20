@@ -69,30 +69,20 @@ confb = confb.reset_index(drop=True)
 confn = confn.reset_index(drop=True)
 
 
-# Number of conflicts per year per adm2_name
-ncym = pd.DataFrame(columns=['reference_year','adm2_name','conflicts'])
+
+
+# Plot number of conflicts per year per adm2_name
+ncym = pd.DataFrame(columns=['reference_year','adm2_name','conflicts','fatalities'])
 for year in confm['reference_year'].unique():
     for elem in confm['adm2_name'].unique():
-        ncym = ncym.append(pd.Series([year, elem, 0],index=ncym.columns),ignore_index=True)
-
+        ncym = ncym.append(pd.Series([year, elem, 0, 0],index=ncym.columns),ignore_index=True)
 # Esattamente questo!
 # Counts number of conflicts in a year in a adm2_name
 for idx, elem in confm.iterrows():
     ncym.set_value(ncym[(ncym.reference_year == elem.reference_year) & (ncym.adm2_name == elem.adm2_name)].index,'conflicts', ncym['conflicts']+1)
-
-
-
+for idx, elem in confm.iterrows():
+    ncym.set_value(ncym[(ncym.reference_year == elem.reference_year) & (ncym.adm2_name == elem.adm2_name)].index,'fatalities', ncym['fatalities']+ int(elem['fatalities']))
 # Number of conflicts in Gao per reference_year
 plt.style.use('fivethirtyeight')
-graph = ncym[ncym['adm2_name'] == 'Gao'].plot(x='reference_year',y='conflicts',figsize=(10,7))
+graph = ncym[ncym.adm2_name.isin(['Gao'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
 plt.show()
-
-
-
-
-
-for year in range(2013,2020):
-    if elem.loc['reference_year'] == year:
-        ncym[year] = elem.value_counts()
-
-confm.plot(x='reference_year',y='adm2_name',data=confm)
