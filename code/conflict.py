@@ -34,8 +34,8 @@ confn = confn[['reference_year','date','adm0_name','adm1_name','adm2_name','adm3
 
 # Extract reference_year
 confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
-confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
-confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
+confb = confb[confb.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
+confn = confn[confn.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
 
 # Select adm1_name to work with
 confm = confm[confm.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
@@ -57,10 +57,6 @@ for i in confn.index:
     if confn.loc[i,'adm3_name']=='Abala':
         confn.at[i,'adm2_name']='Abala'
 
-#confm = confm.drop(['adm3_name'])
-#confb = confb.drop(['adm3_name'])
-#confn = confn.drop(['adm3_name'])
-
 confm = confm[confm.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara','Tenenkou','Mopti','Youwarou', 'Gourma-Rharous','Dire','Niafunke', 'Gao','Ansongo','Menaka','Bourem'])]
 confb = confb[confb.adm2_name.isin(['Yatenga','Loroum', 'Yagha','Seno','Soum','Oudalan', 'Komonjdjari'])]
 confn = confn[confn.adm2_name.isin(['Tahoua','Tassara','Tillia', 'Banibangou','Filingue','Ouallam','Say','Tera','Tillaberi','Balleyara','Torodi','Bankilare','Abala','Ayerou','Gotheye'])]
@@ -68,36 +64,43 @@ confm = confm.reset_index(drop=True)
 confb = confb.reset_index(drop=True)
 confn = confn.reset_index(drop=True)
 
-confm['fatalities'] = confm['fatalities'].astype(str).astype(int)
+
+
+
+# Total conflicts
+conf = confm.append(confb.append(confn)).reset_index()
+
+conf['fatalities'] = conf['fatalities'].astype(str).astype(int)
+
+
 
 
 # Plot number of conflicts per year per adm2_name
-ncym = pd.DataFrame(columns=['reference_year','adm2_name','conflicts','fatalities'])
-for year in confm['reference_year'].unique():
-    for elem in confm['adm2_name'].unique():
-        ncym = ncym.append(pd.Series([year, elem, 0, 0],index=ncym.columns),ignore_index=True)
+ncy = pd.DataFrame(columns=['reference_year','adm2_name','conflicts','fatalities'])
+for year in conf['reference_year'].unique():
+    for elem in conf['adm2_name'].unique():
+        ncy = ncy.append(pd.Series([year, elem, 0, 0],index=ncy.columns),ignore_index=True)
 
-ncym = ncym.sort_values(by=['reference_year','adm2_name'])
-ncym = ncym.reset_index(drop=True)
+ncy = ncy.sort_values(by=['reference_year','adm2_name'])
+ncy = ncy.reset_index(drop=True)
 
 # Counts the number of conflicts for each adm2_name in Mali for each year
-c = pd.DataFrame({'conflicts' : confm.groupby(['reference_year','adm2_name']).size()}).reset_index()
+c = pd.DataFrame({'conflicts' : conf.groupby(['reference_year','adm2_name']).size()}).reset_index()
 c = c.sort_values(by=['reference_year','adm2_name'])
 c = c.reset_index(drop=True)
 # Counts the number of kills for each adm2_name in Mali for each year
-f = pd.DataFrame({'fatalities' : confm.groupby(['reference_year','adm2_name'])['fatalities'].sum()}).reset_index()
+f = pd.DataFrame({'fatalities' : conf.groupby(['reference_year','adm2_name'])['fatalities'].sum()}).reset_index()
 f = f.sort_values(by=['reference_year','adm2_name'])
 f = f.reset_index(drop=True)
 
 for index, row in c.iterrows():
-    ncym.loc[(ncym.reference_year == row.reference_year) & (ncym.adm2_name == row.adm2_name), 'conflicts'] = row['conflicts']
+    ncy.loc[(ncy.reference_year == row.reference_year) & (ncy.adm2_name == row.adm2_name), 'conflicts'] = row['conflicts']
 
 for index, row in f.iterrows():
-    ncym.loc[(ncym.reference_year == row.reference_year) & (ncym.adm2_name == row.adm2_name), 'fatalities'] = row['fatalities']
-
+    ncy.loc[(ncy.reference_year == row.reference_year) & (ncy.adm2_name == row.adm2_name), 'fatalities'] = row['fatalities']
 
 
 # Number of conflicts in Gao per reference_year
 plt.style.use('fivethirtyeight')
-graph = ncym[ncym.adm2_name.isin(['Mopti'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
+graph = ncy[ncy.adm2_name.isin(['Mopti'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
 plt.show()
