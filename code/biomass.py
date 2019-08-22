@@ -92,11 +92,6 @@ for year in range(2013,2019):
 
 bioexp.set_index(['reference_year','adm2_name'], inplace=True)
 
-for adm2 in bioexp.adm2_name.unique():
-    bioexp.loc[(2013,'Yagha')]['biomass'] = bio[(bio.adm2_name == 'Yagha')].at[:][5]
-    bioexp.loc[(adm2, 2014)]['biomass'] = bio[(bio.adm2_name == adm2)]['2014']
-
-
 for index, row in bio.iterrows():
     for adm2 in bio.adm2_name.unique():
         if row['adm2_name'] == adm2:
@@ -106,7 +101,9 @@ for index, row in bio.iterrows():
             bioexp.loc[(2016,adm2)]['biomass'] = row['2016']
             bioexp.loc[(2017,adm2)]['biomass'] = row['2017']
             bioexp.loc[(2018,adm2)]['biomass'] = row['2018']
-bioexp.reset_index(inplace=True)
+
+print(bioexp)
+bioexp = bioexp.reset_index()
 
 
 

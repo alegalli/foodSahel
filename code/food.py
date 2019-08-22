@@ -75,6 +75,13 @@ plt.show()
 
 
 
+# Data to be exported
+millet_price = mmil
+millet_price = millet_price[millet_price.reference_year.isin([2014,2015,2016,2017,2018,2019])]
+millet_price.reset_index(inplace=True)
+millet_price['price_var'] = diffmil['price_var']
+millet_price = millet_price[['reference_year','adm1_name','mean','price_var']]
+
+
 # Export data
-diffmil.to_csv('../data/Food Prices/millet_var.csv')
-mmil.to_csv('../data/Food Prices/millet_price.csv')
+millet_price.to_csv('../data/Food Prices/millet_price.csv')
