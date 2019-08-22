@@ -68,7 +68,7 @@ confm = confm.reset_index(drop=True)
 confb = confb.reset_index(drop=True)
 confn = confn.reset_index(drop=True)
 
-
+confm['fatalities'] = confm['fatalities'].astype(str).astype(int)
 
 
 # Plot number of conflicts per year per adm2_name
@@ -76,13 +76,28 @@ ncym = pd.DataFrame(columns=['reference_year','adm2_name','conflicts','fatalitie
 for year in confm['reference_year'].unique():
     for elem in confm['adm2_name'].unique():
         ncym = ncym.append(pd.Series([year, elem, 0, 0],index=ncym.columns),ignore_index=True)
-# Esattamente questo!
-# Counts number of conflicts in a year in a adm2_name
-for idx, elem in confm.iterrows():
-    ncym.set_value(ncym[(ncym.reference_year == elem.reference_year) & (ncym.adm2_name == elem.adm2_name)].index,'conflicts', ncym['conflicts']+1)
-for idx, elem in confm.iterrows():
-    ncym.set_value(ncym[(ncym.reference_year == elem.reference_year) & (ncym.adm2_name == elem.adm2_name)].index,'fatalities', ncym['fatalities']+ int(elem['fatalities']))
+
+ncym = ncym.sort_values(by=['reference_year','adm2_name'])
+ncym = ncym.reset_index(drop=True)
+
+# Counts the number of conflicts for each adm2_name in Mali for each year
+c = pd.DataFrame({'conflicts' : confm.groupby(['reference_year','adm2_name']).size()}).reset_index()
+c = c.sort_values(by=['reference_year','adm2_name'])
+c = c.reset_index(drop=True)
+# Counts the number of kills for each adm2_name in Mali for each year
+f = pd.DataFrame({'fatalities' : confm.groupby(['reference_year','adm2_name'])['fatalities'].sum()}).reset_index()
+f = f.sort_values(by=['reference_year','adm2_name'])
+f = f.reset_index(drop=True)
+
+for index, row in c.iterrows():
+    ncym.loc[(ncym.reference_year == row.reference_year) & (ncym.adm2_name == row.adm2_name), 'conflicts'] = row['conflicts']
+
+for index, row in f.iterrows():
+    ncym.loc[(ncym.reference_year == row.reference_year) & (ncym.adm2_name == row.adm2_name), 'fatalities'] = row['fatalities']
+
+
+
 # Number of conflicts in Gao per reference_year
 plt.style.use('fivethirtyeight')
-graph = ncym[ncym.adm2_name.isin(['Gao'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
+graph = ncym[ncym.adm2_name.isin(['Mopti'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
 plt.show()

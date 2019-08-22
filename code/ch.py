@@ -169,7 +169,7 @@ graph = phase_class.plot(figsize=(10,7))
 plt.show()
 
 # bello ma vorrei visualizzare la stessa adm2_name con lo stesso colore e metterci una legenda
-sns.swarmplot(x='year',y='phase_class',data=phase)
+sns.swarmplot(x='reference_year',y='phase_class',data=phase_class)
 
 
 
@@ -183,6 +183,7 @@ sns.swarmplot(x='reference_year',y='phase_class',data=lean)
 # Super interesting
 # Visualize all the data available (year, p35_density)
 sns.swarmplot(x='reference_year',y='p35_density',data=lean)
+sns.swarmplot(x='reference_year',y='p35_density',data=lean[lean.adm2_name.isin(['Gao','Torodi','Yagha'])])
 
 
 
