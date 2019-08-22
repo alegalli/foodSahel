@@ -114,15 +114,15 @@ diffmil.reset_index(inplace=True)
 diffmil = diffmil[['reference_year','adm1_name','mean_diff']]
 
 
+plt.style.use('fivethirtyeight')
 
+# Plot millet price mean
+graph = mmil[mmil.adm1_name.isin(['Mopti'])].plot(x='reference_year',y=['mean'],figsize=(10,7))
 
-# To plot prices I have to select or the food I want to plot, or the unique area I want to plot
-#food_pricem1 = pd.DataFrame()
-#food_pricem1['adm1_name'] = foodm.adm1_name[foodm.reference_year.isin([2014])]
-#food_pricem1['cmname'] = foodm.cmname[foodm.reference_year.isin([2014])]
-#food_pricem1[2014] = foodm.price[foodm.reference_year.isin([2014])]
-#
-# Let's plot things
-#plt.style.use('fivethirtyeight')
-#fm.plot(figsize=(10,7))
-#plt.show()
+# Plot millet price std
+graph = stmil[stmil.adm1_name.isin(['Mopti'])].plot(x='reference_year',y=['std'],figsize=(10,7))
+
+# Plot millet price variations
+graph = diffmil[diffmil.adm1_name.isin(['Mopti'])].plot(x='reference_year',y=['mean_diff'],figsize=(10,7))
+
+plt.show()
