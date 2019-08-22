@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+"""
 foodm = pd.read_csv('../data/Food Prices/wfp_food_prices_mali.csv',low_memory=False)
 foodb = pd.read_csv('../data/Food Prices/wfp_food_prices_burkina-faso.csv',low_memory=False)
 foodn = pd.read_csv('../data/Food Prices/wfp_food_prices_niger.csv',low_memory=False)
@@ -53,6 +53,8 @@ foodm = foodm.reset_index(drop=True)
 foodb = foodb.reset_index(drop=True)
 foodn = foodn.reset_index(drop=True)
 
+
+
 meanm = foodm.groupby(['cmname','adm1_name','reference_year'])['price'].mean()
 meanb = foodb.groupby(['cmname','adm1_name','reference_year'])['price'].mean()
 meann = foodn.groupby(['cmname','adm1_name','reference_year'])['price'].mean()
@@ -60,5 +62,67 @@ print(str(meanm))
 print(str(meanb))
 print(str(meann))
 
+"""
 
+
+foodm = pd.read_csv('../data/Food Prices/wfp_food_prices_mali.csv',low_memory=False)
+foodb = pd.read_csv('../data/Food Prices/wfp_food_prices_burkina-faso.csv',low_memory=False)
+foodn = pd.read_csv('../data/Food Prices/wfp_food_prices_niger.csv',low_memory=False)
+foodm = foodm.drop(0)
+foodb = foodb.drop(0)
+foodn = foodn.drop(0)
+food = foodm.append(foodb.append(foodn)).reset_index()
+food.rename(columns={'country':'adm0_name',
+                     'admname':'adm1_name'}, inplace=True)
+food = food[['date','adm0_name','adm1_name','mktname','category','cmname',
+        'price','currency','unit']]
+food['reference_year'] = food.date.str.split('-',expand=True)[0]
+food = food.drop(0)
+food['reference_year'] = food['reference_year'].astype(int)
+food['price'] = food['price'].astype(float)
+food = food[food.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
+food = food[food.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
+food = food.reset_index(drop=True)
+
+
+
+# Interested only on millet price variations
+millet = food[food['cmname'] == 'Millet - Retail']
+millet = millet[['reference_year','adm0_name','adm1_name','price']]
+
+# Price mean
+mmil = pd.DataFrame({'mean' : millet.groupby(['reference_year','adm1_name'])['price'].mean()}).reset_index()
+# Price std
+stmil = pd.DataFrame({'std' : millet.groupby(['reference_year','adm1_name'])['price'].std()}).reset_index()
+
+# Difference of price mean
+diffmil = pd.DataFrame(columns=['reference_year','adm1_name','mean_diff'])
+
+for year in range(2013,2020):
+    for elem in millet['adm1_name'].unique():
+        diffmil = diffmil.append(pd.Series([year, elem, 0],index=diffmil.columns),ignore_index=True)
+
+mmil = mmil.sort_values(['reference_year','adm1_name']).reset_index()
+diffmil = diffmil.sort_values(['reference_year','adm1_name']).reset_index()
+
+# Finally him:
+for adm1 in diffmil.adm1_name.unique():
+    diffmil.loc[diffmil.adm1_name == adm1,'mean_diff'] = mmil[mmil.adm1_name == adm1]['mean'].diff()
+
+diffmil = diffmil[diffmil.reference_year.isin(range(2014,2020))]
+diffmil.reset_index(inplace=True)
+diffmil = diffmil[['reference_year','adm1_name','mean_diff']]
+
+
+
+
+# To plot prices I have to select or the food I want to plot, or the unique area I want to plot
+#food_pricem1 = pd.DataFrame()
+#food_pricem1['adm1_name'] = foodm.adm1_name[foodm.reference_year.isin([2014])]
+#food_pricem1['cmname'] = foodm.cmname[foodm.reference_year.isin([2014])]
+#food_pricem1[2014] = foodm.price[foodm.reference_year.isin([2014])]
+#
 # Let's plot things
+#plt.style.use('fivethirtyeight')
+#fm.plot(figsize=(10,7))
+#plt.show()
