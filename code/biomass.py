@@ -42,6 +42,8 @@ bio = bio[bio.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara',
 bio = bio.reset_index(drop=True)
 
 
+
+
 # Biomass production per AREA: Biomass Density biodens
 biodens = pd.DataFrame(np.array([[2013,2014,2015,2016,2017,2018]]),columns=['2013','2014','2015','2016','2017','2018'])
 biodens = biodens.append(bio[['2013','2014','2015','2016','2017','2018']])
@@ -58,13 +60,13 @@ biodens = biodens.reset_index(drop=True)
 biodens.columns = ['year']+bio.adm2_name.unique().tolist()
 
 # Selecting the adm2_name with a certain criteria
-biotry = biodens.loc[0,biodens.columns.isin(['Yatenga','Loroum','Yagha','Soum','Komonjdjari'])]
+places = biodens.loc[0,biodens.columns.isin(['Yatenga','Loroum','Yagha','Soum','Komonjdjari'])]
 
 # Select plot style
 # See more: https://github.com/matplotlib/matplotlib/blob/38be7aeaaac3691560aeadafe46722dda427ef47/lib/matplotlib/mpl-data/stylelib/fivethirtyeight.mplstyle
 style.use('fivethirtyeight')
 # Plot Biomass Density of the adm2_name tonnes/m^2
-bio_graph = biodens.plot(x='year',y=biotry.index,figsize=(10,7))
+bio_graph = biodens.plot(x='year',y=places.index,figsize=(10,7))
 bio_graph.tick_params(axis='both',which='major',labelsize=18)
 bio_graph.set_yticklabels(labels = [-10, '0   ', '10   ', '20   ', '30   ', '40   ', '50   ', '60   ', '70   ', '80   '])
 bio_graph.axhline(y = 0, color = 'black', linewidth = 1.3, alpha = .7)
@@ -77,5 +79,37 @@ bio_graph.xaxis.label.set_visible(False)
 plt.show()
 
 
+
+
+
+# Create a DataFrame to be exported:
+# index key = (reference_year, adm2_name)
+# columns = (reference_year, adm2_name, area, biomass)
+bioexp = pd.DataFrame(columns=['reference_year','adm2_name','biomass'])
+for year in range(2013,2019):
+    for elem in bio.adm2_name.unique():
+        bioexp = bioexp.append(pd.Series([year, elem, 0],index=bioexp.columns),ignore_index=True)
+
+bioexp.set_index(['reference_year','adm2_name'], inplace=True)
+
+for adm2 in bioexp.adm2_name.unique():
+    bioexp.loc[(2013,'Yagha')]['biomass'] = bio[(bio.adm2_name == 'Yagha')].at[:][5]
+    bioexp.loc[(adm2, 2014)]['biomass'] = bio[(bio.adm2_name == adm2)]['2014']
+
+
+for index, row in bio.iterrows():
+    for adm2 in bio.adm2_name.unique():
+        if row['adm2_name'] == adm2:
+            bioexp.loc[(2013,adm2)]['biomass'] = row['2013']
+            bioexp.loc[(2014,adm2)]['biomass'] = row['2014']
+            bioexp.loc[(2015,adm2)]['biomass'] = row['2015']
+            bioexp.loc[(2016,adm2)]['biomass'] = row['2016']
+            bioexp.loc[(2017,adm2)]['biomass'] = row['2017']
+            bioexp.loc[(2018,adm2)]['biomass'] = row['2018']
+bioexp.reset_index(inplace=True)
+
+
+
+
 # Export data
-bio.to_csv('../data/Biomass Production/biomass.csv', index=False)
+bioexp.to_csv('../data/Biomass Production/biomass.csv', index=False)
