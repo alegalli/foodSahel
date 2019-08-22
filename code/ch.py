@@ -52,9 +52,10 @@ lean['p35_density'] = lean['phase35'].div(lean['population'])
 #lean_graph = lean[lean.adm2_name=='Gao'].plot(x='reference_year',y='p35_density',figsize=(12,8))
 
 
-# I should create a DataFrame where a column is year, the other columns are the different areas (same as biomass)
 
-# Create a DataFrame to plot population
+
+# I should create a DataFrame where a column is year, the other columns are the different areas (same as biomass)
+# Create a DataFrame to plot population growth
 pop1 = pd.DataFrame()
 pop1['adm0_name'] = lean.adm0_name[lean.reference_year.isin([2014])]
 pop1['adm1_name'] = lean.adm1_name[lean.reference_year.isin([2014])]
@@ -82,7 +83,7 @@ p = pop1[[2014,2015,2016,2017,2018,2019]]
 p.index = pop1['adm2_name']
 p = p.T
 
-# Select adm2_name to see
+# Select adm2_name to observe
 pop = p[['Bankass','Torodi','Gao','Yatenga']]
 
 # Plot population
@@ -92,6 +93,8 @@ plt.show()
 
 
 
+
+# WHAT I WANT TO PREDICT
 # Create a DataFrame to plot p35_density
 p351 = pd.DataFrame()
 p351['adm0_name'] = lean.adm0_name[lean.reference_year.isin([2014])]
@@ -107,10 +110,6 @@ for anno in range(2015,2020):
     p352['adm1_name'] = lean.adm1_name[lean.reference_year.isin([anno])]
     p352['adm2_name2'] = lean.adm2_name[lean.reference_year.isin([anno])]
     p352[anno] = lean.p35_density[lean.reference_year.isin([anno])]
-    # NOTE: with nan all the sort will create wrong values
-    # For the above reason I have to drop all NaN before sorting
-    #p351.dropna()
-    # but it's easyer not to put Tillaberi and Tahoua from the beginning
     p352 = p352.sort_values(by=['adm0_name','adm1_name','adm2_name2'])
     p352 = p352.reset_index(drop=True)
     p351[anno] = p352[anno]
@@ -120,7 +119,7 @@ phase35 = p351[[2014,2015,2016,2017,2018,2019]]
 phase35.index = p351['adm2_name']
 phase35 = phase35.T
 
-# Select adm2_name to see
+# Select adm2_name to observe
 p35 = phase35[['Bankass','Torodi','Gao','Yatenga']]
 
 # Plot p35
@@ -131,6 +130,7 @@ plt.show()
 
 
 
+# NOT SO INTERESTING:
 # Create a DataFrame to plot phase_class
 phase_class1 = pd.DataFrame()
 phase_class1['adm0_name'] = lean.adm0_name[lean.reference_year.isin([2014])]
@@ -146,10 +146,6 @@ for anno in range(2015,2020):
     phase_class2['adm1_name'] = lean.adm1_name[lean.reference_year.isin([anno])]
     phase_class2['adm2_name2'] = lean.adm2_name[lean.reference_year.isin([anno])]
     phase_class2[anno] = lean.phase_class[lean.reference_year.isin([anno])]
-    # NOTE: with nan all the sort will create wrong values
-    # For the above reason I have to drop all NaN before sorting
-    #phase_class1.dropna()
-    # but it's easyer not to put Tillaberi and Tahoua from the beginning
     phase_class2 = phase_class2.sort_values(by=['adm0_name','adm1_name','adm2_name2'])
     phase_class2 = phase_class2.reset_index(drop=True)
     phase_class1[anno] = phase_class2[anno]
@@ -168,30 +164,38 @@ plt.style.use('fivethirtyeight')
 graph = phase_class.plot(figsize=(10,7))
 plt.show()
 
-# bello ma vorrei visualizzare la stessa adm2_name con lo stesso colore e metterci una legenda
+# ENDOF NOT SO INTERESTING
+
+
+
+
+# TO DEVELOP
+# I would like to visualize adm2_name with the same color and put a legend
 sns.swarmplot(x='reference_year',y='phase_class',data=phase_class)
 
 
 
 
+# BANAL
 # Visualize all the data available (year, phase_class)
 sns.swarmplot(x='reference_year',y='phase_class',data=lean)
 
 
 
 
-# Super interesting
+# CURIOSITY:
 # Visualize all the data available (year, p35_density)
 sns.swarmplot(x='reference_year',y='p35_density',data=lean)
-sns.swarmplot(x='reference_year',y='p35_density',data=lean[lean.adm2_name.isin(['Gao','Torodi','Yagha'])])
+#sns.swarmplot(x='reference_year',y='p35_density',data=lean[lean.adm2_name.isin(['Gao','Torodi','Yagha'])])
 
 
 
 
+# NOT SO INTERESTING
 # Small linear regression model
-sns.lmplot(x='population',y='p35_density',data=lean,figsize=(10,8))
+#sns.lmplot(x='population',y='p35_density',data=lean,figsize=(10,8))
 
-
+plt.show()
 
 
 # Export data

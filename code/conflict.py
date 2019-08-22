@@ -6,7 +6,7 @@ confm = pd.read_csv('../data/Conflict Data/Conflict Data for Mali.csv')
 confb = pd.read_csv('../data/Conflict Data/Conflict Data for Burkina Faso.csv')
 confn = pd.read_csv('../data/Conflict Data/Conflict Data for Niger.csv')
 
-# Features I'm interested in:
+# Select columns I'm interested in
 confm.rename(columns={'country':'adm0_name',
                     'admin1':'adm1_name',
                     'admin2':'adm2_name',
@@ -100,7 +100,7 @@ for index, row in f.iterrows():
     ncy.loc[(ncy.reference_year == row.reference_year) & (ncy.adm2_name == row.adm2_name), 'fatalities'] = row['fatalities']
 
 
-# Number of conflicts in Gao per reference_year
+# Plot number of conflicts and fatalities in Gao per reference_year
 plt.style.use('fivethirtyeight')
 graph = ncy[ncy.adm2_name.isin(['Mopti'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
 plt.show()
