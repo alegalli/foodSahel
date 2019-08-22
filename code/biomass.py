@@ -77,5 +77,5 @@ bio_graph.xaxis.label.set_visible(False)
 plt.show()
 
 
-# Extract csv
-#ex = bio.to_csv('../data/biomass.csv', index=False)
+# Export data
+bio.to_csv('../data/Biomass Production/biomass.csv', index=False)

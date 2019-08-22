@@ -126,3 +126,9 @@ graph = stmil[stmil.adm1_name.isin(['Mopti'])].plot(x='reference_year',y=['std']
 graph = diffmil[diffmil.adm1_name.isin(['Mopti'])].plot(x='reference_year',y=['mean_diff'],figsize=(10,7))
 
 plt.show()
+
+
+
+
+# Export data
+diffmil.to_csv('../data/Food Prices/millet_var.csv')

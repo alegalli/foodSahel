@@ -190,3 +190,9 @@ sns.swarmplot(x='reference_year',y='p35_density',data=lean[lean.adm2_name.isin([
 
 # Small linear regression model
 sns.lmplot(x='population',y='p35_density',data=lean,figsize=(10,8))
+
+
+
+
+# Export data
+lean.to_csv('../data/Cadre Harmonise/lean.csv')

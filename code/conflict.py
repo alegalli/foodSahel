@@ -104,3 +104,9 @@ for index, row in f.iterrows():
 plt.style.use('fivethirtyeight')
 graph = ncy[ncy.adm2_name.isin(['Mopti'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
 plt.show()
+
+
+
+
+# Export data
+ncy.to_csv('../data/Conflict Data/conflict_numb.csv')
