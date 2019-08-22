@@ -120,7 +120,7 @@ phase35.index = p351['adm2_name']
 phase35 = phase35.T
 
 # Select adm2_name to observe
-p35 = phase35[['Bankass','Torodi','Gao','Yatenga']]
+p35 = phase35[['Mopti']]
 
 # Plot p35
 plt.style.use('fivethirtyeight')

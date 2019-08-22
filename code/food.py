@@ -77,3 +77,4 @@ plt.show()
 
 # Export data
 diffmil.to_csv('../data/Food Prices/millet_var.csv')
+mmil.to_csv('../data/Food Prices/millet_price.csv')
