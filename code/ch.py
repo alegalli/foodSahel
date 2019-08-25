@@ -27,8 +27,8 @@ ch = ch[ch.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara','Te
                               'Yatenga','Loroum',
                               'Yagha','Seno','Soum','Oudalan',
                               'Komonjdjari',
-                              'Tassara','Tillia', # I take out Tillaberi and Tahoua because of some values are in Tillaberi Department and Tahoua Department
-                              'Banibangou','Filingue','Ouallam','Say','Tera','Balleyara','Torodi','Bankilare','Abala','Ayerou','Gotheye'])]
+                              'Tillia', # I take out Tillaberi and Tahoua because of some values are in Tillaberi Department and Tahoua Department
+                              'Banibangou','Filingue','Ouallam','Say','Tera','Torodi','Abala','Ayerou'])]#removed: Tassara, Gotheye, Bankilare, Balleyara Because are not in conflict
 
 # Sorting ch by ['adm0_name','reference_year','chtype','reference_label','exercise_label','adm1_name','adm2_name']
 ch = ch.sort_values(by=['adm0_name','reference_year','chtype','reference_label','exercise_label','adm1_name','adm2_name'])
@@ -120,7 +120,7 @@ phase35.index = p351['adm2_name']
 phase35 = phase35.T
 
 # Select adm2_name to observe
-p35 = phase35[['Mopti']]
+p35 = phase35[['Tera']]
 
 # Plot p35
 plt.style.use('fivethirtyeight')

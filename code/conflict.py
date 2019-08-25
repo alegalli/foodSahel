@@ -33,9 +33,9 @@ confn = confn[['reference_year','date','adm0_name','adm1_name','adm2_name','adm3
         'event_type','sub_event_type','fatalities']]
 
 # Extract reference_year
-confm = confm[confm.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
-confb = confb[confb.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
-confn = confn[confn.reference_year.isin([2013,2014,2015,2016,2017,2018,2019])]
+confm = confm[confm.reference_year.isin([2014,2015,2016,2017,2018,2019])]
+confb = confb[confb.reference_year.isin([2014,2015,2016,2017,2018,2019])]
+confn = confn[confn.reference_year.isin([2014,2015,2016,2017,2018,2019])]
 
 # Select adm1_name to work with
 confm = confm[confm.adm1_name.isin(['Gao','Mopti','Tombouctou','Nord','Sahel','Est','Tahoua','Tillaberi'])]
@@ -59,7 +59,7 @@ for i in confn.index:
 
 confm = confm[confm.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara','Tenenkou','Mopti','Youwarou', 'Gourma-Rharous','Dire','Niafunke', 'Gao','Ansongo','Menaka','Bourem'])]
 confb = confb[confb.adm2_name.isin(['Yatenga','Loroum', 'Yagha','Seno','Soum','Oudalan', 'Komonjdjari'])]
-confn = confn[confn.adm2_name.isin(['Tahoua','Tassara','Tillia', 'Banibangou','Filingue','Ouallam','Say','Tera','Tillaberi','Balleyara','Torodi','Bankilare','Abala','Ayerou','Gotheye'])]
+confn = confn[confn.adm2_name.isin(['Tillia', 'Banibangou','Filingue','Ouallam','Say','Tera','Torodi','Abala','Ayerou'])]#removed: Tassara, Gotheye, Bankilare, Balleyara Because are not in the database, Tillaberi,Tahoua because in lean these data are mess
 confm = confm.reset_index(drop=True)
 confb = confb.reset_index(drop=True)
 confn = confn.reset_index(drop=True)
@@ -78,8 +78,8 @@ conf['fatalities'] = conf['fatalities'].astype(str).astype(int)
 # Plot number of conflicts per year per adm2_name
 ncy = pd.DataFrame(columns=['reference_year','adm2_name','conflicts','fatalities'])
 for year in conf['reference_year'].unique():
-    for elem in conf['adm2_name'].unique():
-        ncy = ncy.append(pd.Series([year, elem, 0, 0],index=ncy.columns),ignore_index=True)
+    for adm2_name in conf['adm2_name'].unique():
+        ncy = ncy.append(pd.Series([year, adm2_name, 0, 0],index=ncy.columns),ignore_index=True)
 
 ncy = ncy.sort_values(by=['reference_year','adm2_name'])
 ncy = ncy.reset_index(drop=True)
@@ -102,7 +102,8 @@ for index, row in f.iterrows():
 
 # Plot number of conflicts and fatalities in Gao per reference_year
 plt.style.use('fivethirtyeight')
-graph = ncy[ncy.adm2_name.isin(['Mopti'])].plot(x='reference_year',y=['fatalities','conflicts'],figsize=(10,7))
+g = ncy[ncy.adm2_name.isin(['Youwarou'])].plot(x='reference_year',y=['conflicts','fatalities'],figsize=(10,7))
+g.xaxis.label.set_visible(False)
 plt.show()
 
 

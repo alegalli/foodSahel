@@ -36,8 +36,8 @@ bio = bio[bio.adm2_name.isin(['Bankass','Koro','Douentza','Djenne','Bandiagara',
                               'Yatenga','Loroum',
                               'Yagha','Seno','Soum','Oudalan',
                               'Komonjdjari',
-                              'Tahoua','Tassara','Tillia',
-                              'Banibangou','Filingue','Ouallam','Say','Tera','Tillaberi','Balleyara','Torodi','Bankilare','Abala','Ayerou','Gotheye'])]
+                              'Tillia',
+                              'Banibangou','Filingue','Ouallam','Say','Tera','Torodi','Abala','Ayerou'])]#removed: Tassara, Gotheye, Bankilare, Balleyara Because are not in conflict
 
 bio = bio.reset_index(drop=True)
 
@@ -60,7 +60,7 @@ biodens = biodens.reset_index(drop=True)
 biodens.columns = ['year']+bio.adm2_name.unique().tolist()
 
 # Selecting the adm2_name with a certain criteria
-places = biodens.loc[0,biodens.columns.isin(['Yatenga','Loroum','Yagha','Soum','Komonjdjari'])]
+places = biodens.loc[0,biodens.columns.isin(['Tera'])]
 
 # Select plot style
 # See more: https://github.com/matplotlib/matplotlib/blob/38be7aeaaac3691560aeadafe46722dda427ef47/lib/matplotlib/mpl-data/stylelib/fivethirtyeight.mplstyle
@@ -68,7 +68,7 @@ style.use('fivethirtyeight')
 # Plot Biomass Density of the adm2_name tonnes/m^2
 bio_graph = biodens.plot(x='year',y=places.index,figsize=(10,7))
 bio_graph.tick_params(axis='both',which='major',labelsize=18)
-bio_graph.set_yticklabels(labels = [-10, '0   ', '10   ', '20   ', '30   ', '40   ', '50   ', '60   ', '70   ', '80   '])
+#bio_graph.set_yticklabels(labels = [-10, '0   ', '5   ', '10   ', '15   ', '20   ', '25   ', '30   ', '35   ', '40   '])
 bio_graph.axhline(y = 0, color = 'black', linewidth = 1.3, alpha = .7)
 # TODO: Set limits
 #bio_graph.set_xlim(left = 1969, right = 2011) #mi da problemi
