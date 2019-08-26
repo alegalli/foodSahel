@@ -187,4 +187,4 @@ for index, row in millet_price.iterrows():
 
 
 # export data
-m_p.to_csv('../data/Food Prices/millet_price.csv')
+m_p.to_csv('../data/Food Prices/millet_price.csv',index=False)

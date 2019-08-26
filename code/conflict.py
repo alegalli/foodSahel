@@ -110,4 +110,4 @@ plt.show()
 
 
 # Export data
-ncy.to_csv('../data/Conflict Data/conflict_numb.csv')
+ncy.to_csv('../data/Conflict Data/conflict_numb.csv',index=False)

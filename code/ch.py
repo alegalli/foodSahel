@@ -199,4 +199,4 @@ plt.show()
 
 
 # Export data
-lean.to_csv('../data/Cadre Harmonise/lean.csv')
+lean.to_csv('../data/Cadre Harmonise/lean.csv',index=False)
